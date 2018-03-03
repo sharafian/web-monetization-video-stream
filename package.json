@@ -1,0 +1,19 @@
+{
+  "name": "web-monetization-video-stream",
+  "version": "1.0.0",
+  "description": "Allows users of Web Monetization enabled services like [Flat](https://getflat.com) to pay for a video stream. As money is sent to the server, it authorizes the stream to send more seconds of video.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharafian/web-monetization-video-stream.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sharafian/web-monetization-video-stream/issues"
+  },
+  "homepage": "https://github.com/sharafian/web-monetization-video-stream#readme"
+}
