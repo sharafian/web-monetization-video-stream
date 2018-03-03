@@ -29,7 +29,7 @@ async function run () {
     }
   })
 
-  router.get('/pay/:id', () => {
+  router.get('/pay/:id', async ctx => {
     if (ctx.get('Accept').indexOf('application/spsp+json') !== -1) {
       const { destinationAccount, sharedSecret } =
         receiver.generateAddressAndSecret()
@@ -47,9 +47,9 @@ async function run () {
     }
   })
 
-  router.get('/video/:vid/:id', () => {
+  router.get('/video/:vid/:id', async ctx => {
     const id = ctx.params.id
-    const readStream = fs.createReadStream('./res/video.mp4')
+    const readStream = fs.createReadStream('./res/video.mkv')
     const transform = new stream.Transform({
       writableObjectMode: true,
       transform (chunk, encoding, cb) {
@@ -73,6 +73,9 @@ async function run () {
         cb(null, chunk)
       }
     })
+
+    readStream.on('error', e => console.error(e))
+    transform.on('error', e => console.error(e))
 
     ctx.body = readStream.pipe(transform)
   })

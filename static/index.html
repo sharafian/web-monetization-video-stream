@@ -4,24 +4,35 @@
 <body>
 <div id="video_container"></div>
 <script>
-  var idBytes = new UInt8Array(16)
-  crypto.getRandomBytes(idBytes)
-  var decoder = new TextDecoder('hex');
-  var id = btoa(decoder.decode(idBytes));
-  var location = 'http://localhost:8080/pay/' + id
+  window.onload = function () {
+    function u8tohex (arr) {
+      var vals = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ]
+      var ret = ''
+      for (var i = 0; i < arr.length; ++i) {
+        ret += vals[(arr[i] & 0xf0) / 0x10]
+        ret += vals[(arr[i] & 0x0f)]
+      }
+      return ret
+    }
 
-  monetize({
-    receiver: location
-  })
+    var idBytes = new Uint8Array(16)
+    crypto.getRandomValues(idBytes)
+    var id = u8tohex(idBytes)
+    var receiver = 'http://localhost:8080/pay/' + id
 
-  var sourceEl = document.createElement('source')
-  var videoEl = document.createElement('video')
-  videoEl.width = 500
-  videoEl.controls = true
-  sourceEl.type = 'video/mp4'
-  sourceEl.src = 'http://localhost:8080/video/123/' + id
-  videoEl.appendChild(sourceEl)
-  document.getElementById('video_container').appendChild(videoEl)
+    window.monetize({
+      receiver
+    })
+
+    var sourceEl = document.createElement('source')
+    var videoEl = document.createElement('video')
+    videoEl.width = 500
+    videoEl.controls = true
+    sourceEl.type = 'video/mkv'
+    sourceEl.src = 'http://localhost:8080/video/123/' + id
+    videoEl.appendChild(sourceEl)
+    document.getElementById('video_container').appendChild(videoEl)
+  }
 </script>
 </body>
 </html>
