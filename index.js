@@ -21,9 +21,12 @@ async function run () {
       const id = params.prepare.destination.split('.').slice(-3)[0]
 
       let balance = buckets.get(id) || 0
-      balance += amount
-      buckets.set(id, score)
+      balance += Number(amount) * 300000
+      buckets.set(id, balance)
       setImmediate(() => balanceEvents.emit(id, balance))
+      console.log('got money for bucket. amount=' + amount,
+        'id=' + id,
+        'balance=' + balance)
 
       await params.acceptSingleChunk()
     }
@@ -42,26 +45,29 @@ async function run () {
       ctx.set('Content-Type', 'application/spsp+json')
       ctx.body = {
         destination_account: resultAccount,
-        shared_secret: details.sharedSecret.toString('base64')
+        shared_secret: sharedSecret.toString('base64')
       }
     }
   })
 
   router.get('/video/:vid/:id', async ctx => {
     const id = ctx.params.id
-    const readStream = fs.createReadStream('./res/video.mkv')
+    const readStream = fs.createReadStream('./res/video.mp4')
     const transform = new stream.Transform({
       writableObjectMode: true,
       transform (chunk, encoding, cb) {
-        let balance = buckets.get(id)
-        let cost = Math.floor(chunk.length / 1000000)
+        let balance = buckets.get(id) || 0
+        let cost = chunk.length
+        console.log('got chunk. chunk=', chunk.length,
+          'cost=' + cost,
+          'balance=' + balance)
 
         if (cost > balance) {
           readStream.pause()
 
-          function reopenStream (balance) {
-            if (balance > cost) {
-              readStream.unpause()
+          function reopenStream (newBalance) {
+            if (newBalance > cost) {
+              readStream.resume()
               setImmediate(() => balanceEvents.removeListener(id, reopenStream))
             }
           }
@@ -70,6 +76,7 @@ async function run () {
         }
 
         balance -= cost
+        buckets.set(id, balance)
         cb(null, chunk)
       }
     })
@@ -77,6 +84,7 @@ async function run () {
     readStream.on('error', e => console.error(e))
     transform.on('error', e => console.error(e))
 
+    console.log('returing a pipe of video')
     ctx.body = readStream.pipe(transform)
   })
 
