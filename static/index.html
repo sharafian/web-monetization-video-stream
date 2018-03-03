@@ -1,0 +1,27 @@
+<html>
+<head>
+</head>
+<body>
+<div id="video_container"></div>
+<script>
+  var idBytes = new UInt8Array(16)
+  crypto.getRandomBytes(idBytes)
+  var decoder = new TextDecoder('hex');
+  var id = btoa(decoder.decode(idBytes));
+  var location = 'http://localhost:8080/pay/' + id
+
+  monetize({
+    receiver: location
+  })
+
+  var sourceEl = document.createElement('source')
+  var videoEl = document.createElement('video')
+  videoEl.width = 500
+  videoEl.controls = true
+  sourceEl.type = 'video/mp4'
+  sourceEl.src = 'http://localhost:8080/video/123/' + id
+  videoEl.appendChild(sourceEl)
+  document.getElementById('video_container').appendChild(videoEl)
+</script>
+</body>
+</html>
