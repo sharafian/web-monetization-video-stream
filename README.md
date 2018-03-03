@@ -19,3 +19,15 @@ npm install
 npm start
 # Now go to localhost:8080
 ```
+
+Load localhost:8080. It might take a little while for the video to start playing.
+You can see the balance increasing and then being used up in the server logs.
+
+Once the page begins playing, try disabling your Web Monetization extension. You
+can now see the balance decreasing in the server logs. Once the balance reaches zero,
+the video is going to stop playing.
+
+Go into the page's console and look at the line that says `run monetize...`.
+Re-enable your Web Monetization extension and copy the function call into the
+console. This will cause the video to start playing again immediately, as the money
+goes to the server.

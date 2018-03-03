@@ -4,7 +4,8 @@
   "description": "Allows users of Web Monetization enabled services like [Flat](https://getflat.com) to pay for a video stream. As money is sent to the server, it authorizes the stream to send more seconds of video.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG=koa* node index.js"
   },
   "repository": {
     "type": "git",

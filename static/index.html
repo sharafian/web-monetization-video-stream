@@ -3,6 +3,7 @@
 </head>
 <body>
 <div id="video_container"></div>
+<p id="info"></p>
 <script>
   window.onload = function () {
     function u8tohex (arr) {
@@ -20,18 +21,27 @@
     var id = u8tohex(idBytes)
     var receiver = 'http://localhost:8080/pay/' + id
 
+    console.log('run `monetize({ receiver: "' + receiver + '" })`')
+
     window.monetize({
       receiver
     })
 
     var sourceEl = document.createElement('source')
     var videoEl = document.createElement('video')
+    videoEl.id = 'buffering_video'
     videoEl.width = 500
     videoEl.controls = true
     sourceEl.type = 'video/mp4'
     sourceEl.src = 'http://localhost:8080/video/123/' + id
     videoEl.appendChild(sourceEl)
     document.getElementById('video_container').appendChild(videoEl)
+
+    vid = document.getElementById('buffering_video')
+    p = document.getElementById('info')
+    setInterval(() => {
+      p.innerHTML = vid.buffered.end(0)
+    }, 1000)
   }
 </script>
 </body>

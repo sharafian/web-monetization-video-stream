@@ -21,7 +21,7 @@ async function run () {
       const id = params.prepare.destination.split('.').slice(-3)[0]
 
       let balance = buckets.get(id) || 0
-      balance += Number(amount) * 300000
+      balance += Number(amount) * 100000
       buckets.set(id, balance)
       setImmediate(() => balanceEvents.emit(id, balance))
       console.log('got money for bucket. amount=' + amount,
