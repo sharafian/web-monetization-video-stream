@@ -52,7 +52,7 @@ async function run () {
 
   router.get('/video/:vid/:id', async ctx => {
     const id = ctx.params.id
-    const readStream = fs.createReadStream('./res/video.mp4')
+    const readStream = fs.createReadStream('./res/video.webm')
     const transform = new stream.Transform({
       writableObjectMode: true,
       transform (chunk, encoding, cb) {

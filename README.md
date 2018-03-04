@@ -38,4 +38,4 @@ goes to the server.
 # TODOs
 
 - [ ] Pay for video time instead of bytes
-- [ ] Show video content instead of just audio+white screen (use webm)
+- [x] Show video content instead of just audio+white screen (use webm)
