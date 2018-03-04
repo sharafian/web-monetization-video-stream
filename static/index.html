@@ -4,6 +4,7 @@
 <body>
 <div id="video_container"></div>
 <p id="info"></p>
+<p id="receiver"></p>
 <script>
   window.onload = function () {
     function u8tohex (arr) {
@@ -23,9 +24,15 @@
 
     console.log('run `monetize({ receiver: "' + receiver + '" })`')
 
-    window.monetize({
-      receiver
-    })
+    if (window.monetize) {
+      window.monetize({
+        receiver
+      })
+    } else {
+      var receiverEl = document.getElementById('receiver')
+      receiverEl.innerText = 'Your extension is disabled or not installed.' +
+        ' Manually pay to ' + receiver
+    }
 
     var sourceEl = document.createElement('source')
     var videoEl = document.createElement('video')
