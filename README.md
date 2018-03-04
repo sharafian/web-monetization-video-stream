@@ -59,6 +59,23 @@ while [ 1 ]; do ilp-spsp send -a 25 -r $stream_url; done
 while [ 1 ]; do ilp-spsp send -a 200 -r $stream_url; done
 ```
 
+## How does it work?
+
+When the page starts:
+
+1. The page generates a random ID for your session.
+2. The page constructs an SPSP receiver url, equal to `http://localhost:8080/pay/${ID}`.
+3. The page calls monetize, using the SPSP receiver.
+4. The page inserts a video element, and loads it from `http://localhost:8080/video/123/${ID}`.
+5. The server creates a video stream associated with your ID.
+5. The video loads about a second of content for free, so the loading process is faster.
+
+As you stay on the page:
+
+1. The server gets money from the browser and puts it in a bucket associated with the ID.
+2. As the video stream reads bytes from disk, it decrements its bucket's balance. When it hits zero the stream is paused.
+3. When the bucket's balance is refilled, the video stream unpauses and begins spending the balance again.
+
 # TODOs
 
 - [ ] Pay for video time instead of bytes
