@@ -15,10 +15,15 @@ Follow their instructions if you don't already have them set up.
 ```
 git clone https://github.com/sharafian/web-monetization-video-stream.git
 cd web-monetization-video-stream
+mkdir res
+# Now move your video file into res/video.mp4
+# mv ~/video.mp4 res/video.mp4
 npm install
 npm start
 # Now go to localhost:8080
 ```
+
+Put a 
 
 Load localhost:8080. It might take a little while for the video to start playing.
 You can see the balance increasing and then being used up in the server logs.
