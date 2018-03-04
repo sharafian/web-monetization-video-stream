@@ -12,6 +12,7 @@ const buckets = new Map()
 const stream = require('stream')
 const EventEmitter = require('events')
 const balanceEvents = new EventEmitter()
+const FREE_BYTES = 100000
 
 async function run () {
   const receiver = await createReceiver({
@@ -21,7 +22,7 @@ async function run () {
       const id = params.prepare.destination.split('.').slice(-3)[0]
 
       let balance = buckets.get(id) || 0
-      balance += Number(amount) * 100000
+      balance += Number(amount) * 5000
       buckets.set(id, balance)
       setImmediate(() => balanceEvents.emit(id, balance))
       console.log('got money for bucket. amount=' + amount,
@@ -56,6 +57,12 @@ async function run () {
     const transform = new stream.Transform({
       writableObjectMode: true,
       transform (chunk, encoding, cb) {
+        if (readStream.bytesRead < FREE_BYTES) {
+          console.log('giving free bytes. total=' + readStream.bytesRead)
+          cb(null, chunk)
+          return
+        }
+
         let balance = buckets.get(id) || 0
         let cost = chunk.length
         console.log('got chunk. chunk=', chunk.length,
