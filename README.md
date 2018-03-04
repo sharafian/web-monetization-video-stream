@@ -46,6 +46,19 @@ The video will play for a few more seconds, then stop. You can play around with
 the parameters here. Try setting up a `while` loop in bash and seeing what
 bandwidth you need in order to make the video play smoothly.
 
+```
+stream_url="http://localhost:8080/pay/c044fea058a6faeaf3cdca113e560262"
+
+# the video will barely play with a bandwidth of 10
+while [ 1 ]; do ilp-spsp send -a 10 -r $stream_url; done
+
+# the video will work but may occasionally buffer
+while [ 1 ]; do ilp-spsp send -a 25 -r $stream_url; done
+
+# the video will play with no interruptions
+while [ 1 ]; do ilp-spsp send -a 200 -r $stream_url; done
+```
+
 # TODOs
 
 - [ ] Pay for video time instead of bytes
