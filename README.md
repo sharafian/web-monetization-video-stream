@@ -26,14 +26,25 @@ npm start
 Load localhost:8080. It might take a little while for the video to start playing.
 You can see the balance increasing and then being used up in the server logs.
 
-Once the page begins playing, try disabling your Web Monetization extension. You
-can now see the balance decreasing in the server logs. Once the balance reaches zero,
-the video is going to stop playing.
+## Watch it Buffer
 
-Go into the page's console and look at the line that says `run monetize...`.
-Re-enable your Web Monetization extension and copy the function call into the
-console. This will cause the video to start playing again immediately, as the money
-goes to the server.
+Disable your monetization extension. Reload `localhost:8080`. The video will load
+the first second or two for free, and then it will stop.
+
+Under the video, the page will tell you that your extension is disabled, and
+give a receiver URL to pay to manually. Copy the URL down.
+
+Run:
+
+```
+npm install -g ilp-spsp
+# use the URL that you copied instead of this exact command
+ilp-spsp send -a 200 -r http://localhost:8080/pay/c044fea058a6faeaf3cdca113e560262
+```
+
+The video will play for a few more seconds, then stop. You can play around with
+the parameters here. Try setting up a `while` loop in bash and seeing what
+bandwidth you need in order to make the video play smoothly.
 
 # TODOs
 
