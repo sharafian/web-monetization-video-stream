@@ -12,6 +12,8 @@ const buckets = new Map()
 const stream = require('stream')
 const EventEmitter = require('events')
 const balanceEvents = new EventEmitter()
+const PRICE_PER_SECOND = 10
+const MAX_PRICE_BUFFER_SECONDS = 5
 
 async function run () {
   const receiver = await createReceiver({
@@ -20,13 +22,19 @@ async function run () {
       const amount = params.prepare.amount
       const id = params.prepare.destination.split('.').slice(-3)[0]
 
-      let balance = buckets.get(id) || 0
-      balance += Number(amount) * 100000
-      buckets.set(id, balance)
-      setImmediate(() => balanceEvents.emit(id, balance))
+      let expiry = Math.max(buckets.get(id) || Date.now())
+      expiry = Math.min(
+        Math.max(
+          expiry + Math.floor(1000 * (Number(amount) / PRICE_PER_SECOND)),
+          Date.now()),
+        Date.now() + MAX_PRICE_BUFFER_SECONDS * 1000)
+
+      buckets.set(id, expiry)
+
+      setImmediate(() => balanceEvents.emit(id, expiry))
       console.log('got money for bucket. amount=' + amount,
         'id=' + id,
-        'balance=' + balance)
+        'expiry=' + expiry)
 
       await params.acceptSingleChunk()
     }
@@ -56,27 +64,18 @@ async function run () {
     const transform = new stream.Transform({
       writableObjectMode: true,
       transform (chunk, encoding, cb) {
-        let balance = buckets.get(id) || 0
-        let cost = chunk.length
+        let expiry = buckets.get(id) || 0
+        let now = Date.now()
         console.log('got chunk. chunk=', chunk.length,
-          'cost=' + cost,
-          'balance=' + balance)
+          'now=' + now,
+          'expiry=' + expiry,
+          'diff=', expiry - now)
 
-        if (cost > balance) {
+        if (expiry < now) {
           readStream.pause()
-
-          function reopenStream (newBalance) {
-            if (newBalance > cost) {
-              readStream.resume()
-              setImmediate(() => balanceEvents.removeListener(id, reopenStream))
-            }
-          }
-
-          balanceEvents.on(id, reopenStream)
+          balanceEvents.once(id, () => readStream.resume())
         }
 
-        balance -= cost
-        buckets.set(id, balance)
         cb(null, chunk)
       }
     })
