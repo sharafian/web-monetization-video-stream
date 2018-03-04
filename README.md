@@ -17,12 +17,12 @@ or [Flat](https://getflat.com).
 
 Follow their instructions if you don't already have them set up.
 
-```
+```sh
 git clone https://github.com/sharafian/web-monetization-video-stream.git
 cd web-monetization-video-stream
 mkdir res
-# Now move your video file into res/video.mp4
-# mv ~/video.mp4 res/video.mp4
+# Alternatively, you can move your own video file into res/video.webm
+wget https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.webm -O res/video.webm
 npm install
 npm start
 # Now go to localhost:8080
@@ -41,7 +41,7 @@ give a receiver URL to pay to manually. Copy the URL down.
 
 Run:
 
-```
+```sh
 npm install -g ilp-spsp
 # use the URL that you copied instead of this exact command
 ilp-spsp send -a 200 -r http://localhost:8080/pay/c044fea058a6faeaf3cdca113e560262
@@ -51,17 +51,17 @@ The video will play for a few more seconds, then stop. You can play around with
 the parameters here. Try setting up a `while` loop in bash and seeing what
 bandwidth you need in order to make the video play smoothly.
 
-```
+```sh
 stream_url="http://localhost:8080/pay/c044fea058a6faeaf3cdca113e560262"
 
 # the video will barely play with a bandwidth of 10
-while [ 1 ]; do ilp-spsp send -a 10 -r $stream_url; done
+while [ 1 ]; do ilp-spsp send -a 10 -r $stream_url; sleep 1; done
 
 # the video will work but may occasionally buffer
-while [ 1 ]; do ilp-spsp send -a 25 -r $stream_url; done
+while [ 1 ]; do ilp-spsp send -a 25 -r $stream_url; sleep 1; done
 
 # the video will play with no interruptions
-while [ 1 ]; do ilp-spsp send -a 200 -r $stream_url; done
+while [ 1 ]; do ilp-spsp send -a 200 -r $stream_url; sleep 1; done
 ```
 
 ## How does it work?
