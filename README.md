@@ -4,6 +4,11 @@ Allows users of Web Monetization enabled services like
 [Flat](https://getflat.com) to pay for a video stream. As money is sent to the
 server, it authorizes the stream to send more seconds of video.
 
+- [Test it out](#test-it-out)
+- [Watch it buffer](#watch-it-buffer)
+- [How does it work?](#how-does-it-work)
+- [TODOs](#todos)
+
 ## Test it out
 
 Assumes you're running [Moneyd](https://github.com/interledgerjs/moneyd-xrp) and
