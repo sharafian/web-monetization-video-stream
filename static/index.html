@@ -1,10 +1,76 @@
 <html>
 <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+
+video::-webkit-media-controls{
+  filter: invert(1) grayscale(1);
+  opacity: 0.5;
+  border-radius: 5px;
+}
+
+.video-element {
+  width: 100%;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.video-description {
+
+}
+
+  </style>
 </head>
 <body>
-<div id="video_container"></div>
-<p id="info"></p>
-<p id="receiver"></p>
+
+<header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+  <h5 class="my-0 mr-md-auto font-weight-normal">Second Person Pronoun Tube</h5>
+  <nav class="my-2 my-md-0 mr-md-3">
+    <a class="p-2 text-dark" href="#">Search</a>
+    <a class="p-2 text-dark" href="#">Profile</a>
+    <a class="p-2 text-dark" href="#">Upload</a>
+    <a class="p-2 text-dark" href="#">Contact</a>
+  </nav>
+  <a class="btn btn-outline-primary" href="#">Sign Up</a>
+</header>
+
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 order-md-1">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">Big Buck Bunny</h4>
+        <div class="row">
+          <div class="col-md-12">
+            <!--<div class="bg-dark text-center overflow-hidden" style="padding:2em;" id="video_container"></div>-->
+            <div id="video_container"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="card-body">
+            <div class="col-md-12 order-md-1">
+              <div class="d-flex justify-content-between align-items-center">
+                <p class="text-success">$ Paid Content</p>
+                <p class="text-muted" id="info">0</p>
+              </div>
+              <p style="text-align:justify;">Big Buck Bunny (code-named Peach) is a 2008 short computer-animated comedy film by the Blender Institute, part of the Blender Foundation. Like the foundation's previous film Elephants Dream, the film was made using Blender, a free software application for animation made by the same foundation. It was released as an open-source film under Creative Commons License Attribution 3.0.</p>
+              <p class="text-muted" id="receiver"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">Comments</h4>
+        <ul class="list-group mb-4">
+          <li class="list-group-item"><h6 class="my-0">Bob</h6><p class="text-muted">Cool.</p></li>
+          <li class="list-group-item"><h6 class="my-0">Chloe</h6><p class="text-muted">Gee, this "Interledger" thing the kids are talking about sure is cool.</p></li>
+          <li class="list-group-item"><h6 class="my-0">Alice</h6><p class="text-muted">Good stuff.</p></li>
+          <li class="list-group-item"><h6 class="my-0">Dave</h6><p class="text-muted">Big Buck Bunny? More like Big Waste of Time. 1 out of 5 stars.</p></li>
+          <li class="list-group-item align-center"><small>Load more comments...</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
 <script>
   window.onload = function () {
     function u8tohex (arr) {
@@ -30,14 +96,15 @@
       })
     } else {
       var receiverEl = document.getElementById('receiver')
-      receiverEl.innerText = 'Your extension is disabled or not installed.' +
-        ' Manually pay to ' + receiver
+      receiverEl.innerHTML = 'Your extension is disabled or not installed.' +
+        ' Manually pay to <a href="' + receiver + '">This Receiver</a>'
     }
 
     var sourceEl = document.createElement('source')
     var videoEl = document.createElement('video')
+    videoEl.class = 'row'
     videoEl.id = 'buffering_video'
-    videoEl.width = 500
+    videoEl.className = 'video-element'
     videoEl.controls = true
     sourceEl.type = 'video/webm'
     sourceEl.src = 'http://localhost:8080/video/123/' + id
