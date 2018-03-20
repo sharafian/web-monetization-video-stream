@@ -1,5 +1,7 @@
 # Web Monetization Video Stream
 
+![Screenshot of the site](./res/screenshot.png)
+
 Allows users of Web Monetization enabled services like
 [Flat](https://getflat.com) to pay for a video stream. As money is sent to the
 server, it authorizes the stream to send more seconds of video.
@@ -20,7 +22,6 @@ Follow their instructions if you don't already have them set up.
 ```sh
 git clone https://github.com/sharafian/web-monetization-video-stream.git
 cd web-monetization-video-stream
-mkdir res
 # Alternatively, you can move your own video file into res/video.webm
 wget https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.webm -O res/video.webm
 npm install
