@@ -87,7 +87,8 @@ video::-webkit-media-controls{
     var idBytes = new Uint8Array(16)
     crypto.getRandomValues(idBytes)
     var id = u8tohex(idBytes)
-    var receiver = 'http://localhost:8080/pay/' + id
+    var domain = new URL(window.location).origin
+    var receiver = domain + '/pay/' + id
 
     console.log('run `monetize({ receiver: "' + receiver + '" })`')
 
@@ -108,7 +109,7 @@ video::-webkit-media-controls{
     videoEl.className = 'video-element'
     videoEl.controls = true
     sourceEl.type = 'video/webm'
-    sourceEl.src = 'http://localhost:8080/video/123/' + id
+    sourceEl.src = domain + '/video/123/' + id
     videoEl.appendChild(sourceEl)
     document.getElementById('video_container').appendChild(videoEl)
 
