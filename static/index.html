@@ -87,8 +87,11 @@ video::-webkit-media-controls{
     var idBytes = new Uint8Array(16)
     crypto.getRandomValues(idBytes)
     var id = u8tohex(idBytes)
-    var domain = new URL(window.location).origin
-    var receiver = domain + '/pay/' + id
+    var url = new URL(window.location)
+    var domain = url.origin
+    var receiver = (url.protocol === 'https:')
+      ? '$' + url.host + '/pay/' + id
+      : domain + '/pay/' + id
 
     console.log('run `monetize({ receiver: "' + receiver + '" })`')
 
@@ -99,7 +102,7 @@ video::-webkit-media-controls{
     } else {
       var receiverEl = document.getElementById('receiver')
       receiverEl.innerHTML = 'Your extension is disabled or not installed.' +
-        ' Manually pay to <a href="' + receiver + '">This Receiver</a>'
+        ' Manually pay to ' + receiver
     }
 
     var sourceEl = document.createElement('source')
