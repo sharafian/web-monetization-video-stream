@@ -19,6 +19,7 @@
   "homepage": "https://github.com/sharafian/web-monetization-video-stream#readme",
   "dependencies": {
     "ilp-plugin": "^3.1.0",
+    "ilp-price": "^1.0.0",
     "ilp-protocol-psk2": "^0.2.1",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",

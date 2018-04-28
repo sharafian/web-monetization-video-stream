@@ -3,6 +3,7 @@ const app = new Koa()
 const router = require('koa-router')()
 const parser = require('koa-bodyparser')()
 const plugin = require('ilp-plugin')()
+const Price = require('ilp-price')
 const { createReceiver } = require('ilp-protocol-psk2')
 const path = require('path')
 const root = path.join(__dirname, 'static')
@@ -15,6 +16,17 @@ const balanceEvents = new EventEmitter()
 const FREE_BYTES = 100000
 
 async function run () {
+  const price = new Price({ plugin })
+  let oneDrop = await price.fetch('XRP', '0.000001')
+
+  setInterval(async () => {
+    try {
+      oneDrop = await price.fetch('XRP', '0.000001')
+    } catch (e) {
+      console.log('failed to refresh rate. error=' + e.message)
+    }
+  }, 1000 * 600) // reload every 10 minutes
+
   const receiver = await createReceiver({
     plugin,
     paymentHandler: async params => {
@@ -22,7 +34,7 @@ async function run () {
       const id = params.prepare.destination.split('.').slice(-3)[0]
 
       let balance = buckets.get(id) || 0
-      balance += Number(amount) * 5000
+      balance += (Number(amount) * 5000) / Number(oneDrop)
       buckets.set(id, balance)
       setImmediate(() => balanceEvents.emit(id, balance))
       console.log('got money for bucket. amount=' + amount,
